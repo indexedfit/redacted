@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>redacted.fit</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #333;
+      background: #fafafa;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #1a1a1a;
+        color: #e0e0e0;
+      }
+      
+      .container {
+        background: #2a2a2a;
+        border-color: #404040;
+      }
+      
+      button {
+        background: #3a3a3a;
+        color: #e0e0e0;
+        border-color: #555;
+      }
+      
+      button:hover:not(:disabled) {
+        background: #4a4a4a;
+      }
+      
+      button.primary {
+        background: #444;
+        color: #fff;
+      }
+      
+      #stage {
+        background: #1a1a1a;
+        border-color: #555;
+      }
+      
+      .file-input-label {
+        background: #3a3a3a;
+        color: #e0e0e0;
+        border-color: #555;
+      }
+      
+      .file-input-label:hover {
+        background: #4a4a4a;
+      }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      text-decoration: line-through;
+      text-decoration-thickness: 1px;
+    }
+
+    .nav {
+      font-size: 13px;
+    }
+
+    .nav a {
+      color: #666;
+      text-decoration: none;
+      margin-left: 20px;
+    }
+
+    .nav a:hover {
+      color: #333;
+    }
+
+    .info-icon {
+      font-family: monospace;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+
+    .file-input-wrapper input[type=file] {
+      position: absolute;
+      left: -9999px;
+    }
+
+    .file-input-label {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #f8f8f8;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      color: #333;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .file-input-label:hover {
+      background: #eee;
+    }
+
+    button {
+      padding: 8px 16px;
+      background: #f8f8f8;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      color: #333;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    button:hover:not(:disabled) {
+      background: #eee;
+    }
+
+    button.primary {
+      background: #333;
+      color: #fff;
+      border-color: #333;
+    }
+
+    button.primary:hover:not(:disabled) {
+      background: #555;
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .image-container {
+      margin-bottom: 24px;
+    }
+
+    #stage {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      background: #fafafa;
+      border: 1px dashed #ccc;
+      border-radius: 3px;
+      display: block;
+    }
+
+    .instructions {
+      margin-top: 16px;
+      padding: 16px;
+      background: #f8f8f8;
+      border: 1px solid #eee;
+      border-radius: 3px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .instructions h3 {
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .instructions ol {
+      margin-left: 16px;
+    }
+
+    .instructions li {
+      margin-bottom: 4px;
+    }
+
+    .status {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      font-size: 11px;
+      color: #888;
+      background: rgba(255,255,255,0.9);
+      padding: 4px 8px;
+      border-radius: 3px;
+      max-width: 250px;
+      z-index: 100;
+    }
+
+    .status.error {
+      color: #d32f2f;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .header {
+        border-color: #404040;
+      }
+      
+      .logo {
+        color: #e0e0e0;
+      }
+      
+      .nav a {
+        color: #aaa;
+      }
+      
+      .nav a:hover {
+        color: #e0e0e0;
+      }
+      
+      .instructions {
+        background: #2a2a2a;
+        border-color: #404040;
+        color: #aaa;
+      }
+      
+      .instructions h3 {
+        color: #e0e0e0;
+      }
+      
+      .status {
+        background: rgba(42,42,42,0.95);
+        color: #aaa;
+      }
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
+      
+      .container {
+        padding: 24px;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .controls > * {
+        width: 100%;
+        text-align: center;
+      }
+
+      .status {
+        position: static;
+        margin-top: 16px;
+        background: #f8f8f8;
+        border: 1px solid #eee;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo">redacted.fit</div>
+      <nav class="nav">
+        <a href="https://indexed.fit" target="_blank">
+          <span class="info-icon">[i]</span> indexed.fit
+        </a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="controls">
+        <div class="file-input-wrapper">
+          <input id="file" type="file" accept="image/*" />
+          <label for="file" class="file-input-label">Choose image</label>
+        </div>
+        <button id="detectBtn" class="primary" disabled>Detect & redact</button>
+        <button id="resetBtn" disabled>Reset</button>
+        <button id="downloadBtn" disabled>Download</button>
+      </div>
+
+      <div class="image-container">
+        <canvas id="stage"></canvas>
+      </div>
+
+      <div class="instructions">
+        <p><strong>Privacy:</strong> All processing happens locally in your browser. No data is sent to any server.</p>
+      </div>
+    </main>
+  </div>
+
+  <div id="status" class="status">Loading...</div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(console.error);
+    }
+  </script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
